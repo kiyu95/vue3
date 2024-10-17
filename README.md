@@ -25,5 +25,5 @@ npm install vue-router
 ```
 
 ```sh
-npm npm install axios
+npm install axios
 ```
