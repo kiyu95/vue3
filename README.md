@@ -20,4 +20,10 @@ npm run dev
 
 ### Additional install
 
-[npm install vue-router] [npm install axios]
+```sh
+npm install vue-router
+```
+
+```sh
+npm npm install axios
+```
