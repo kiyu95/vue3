@@ -1,14 +1,10 @@
+<!-- PostListView 리스트 Grid, Filter component(AppGrid) 분리하기전 version (인프런 Vue 실전편. 섹션4-3 까지) -->
+
 <template>
 	<div>
 		<h2>게시글 목록</h2>
 		<hr class="my-4" />
-		<PostFilter
-			v-model:title="params.title_like"
-			v-model:limit="params._limit"
-		></PostFilter>
-
-		<!-- 아래 주석코드 PostFilter.vue 컴포넌트로 교체 -->
-		<!-- <form @submit.prevent>
+		<form @submit.prevent>
 			<div class="row g-3">
 				<div class="col">
 					<input v-model="params.title_like" type="text" class="form-control" />
@@ -21,19 +17,9 @@
 					</select>
 				</div>
 			</div>
-		</form> -->
+		</form>
 		<hr class="my-4" />
-		<AppGrid :items="posts">
-			<template v-slot="{ item }">
-				<PostItem
-					v-bind:title="item.title"
-					v-bind:content="item.content"
-					:created_at="item.createdAt"
-					@click="goPage(item.id)"
-				></PostItem>
-			</template>
-		</AppGrid>
-		<!-- <div class="row g-3">
+		<div class="row g-3">
 			<div v-for="post in posts" :key="post.id" class="col-4">
 				<PostItem
 					v-bind:title="post.title"
@@ -42,7 +28,7 @@
 					@click="goPage(post.id)"
 				></PostItem>
 			</div>
-		</div> -->
+		</div>
 		<AppPagination
 			:current-page="params._page"
 			:page-count="pageCount"
@@ -64,8 +50,6 @@ import { getPosts } from '@/api/posts';
 import { computed, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import AppPagination from '@/components/AppPagination.vue';
-import AppGrid from '@/components/AppGrid.vue';
-import PostFilter from '@/components/posts/PostFilter.vue';
 
 const router = useRouter();
 const posts = ref([]);
@@ -100,7 +84,6 @@ const pageCount = computed(() =>
 // then을 사용하지 않고 async, await 사용
 const fetchPosts = async () => {
 	try {
-		// console.log('params.value: ', params.value);
 		const response = await getPosts(params.value);
 		posts.value = response.data;
 		totalCount.value = response.headers['x-total-count'];
