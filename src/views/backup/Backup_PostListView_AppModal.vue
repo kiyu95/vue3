@@ -1,3 +1,5 @@
+<!-- PostListView AppModal 추가하기 전 version (인프런 Vue 실전편. 섹션6-3) -->
+
 <template>
 	<div>
 		<h2>게시글 목록</h2>
@@ -28,9 +30,8 @@
 				<PostItem
 					v-bind:title="item.title"
 					v-bind:content="item.content"
-					:created-at="item.createdAt"
+					:created_at="item.createdAt"
 					@click="goPage(item.id)"
-					@modal="openModal(item)"
 				></PostItem>
 			</template>
 		</AppGrid>
@@ -50,15 +51,6 @@
 			@page="page => (params._page = page)"
 		/>
 
-		<Teleport to="#modal">
-			<PostModal
-				v-model="show"
-				:title="modalTitle"
-				:content="modalContent"
-				:created-at="modalCreatedAt"
-			/>
-		</Teleport>
-
 		<hr class="my-5" />
 		<AppCard>
 			<PostDetailView :id="1"></PostDetailView>
@@ -76,8 +68,6 @@ import { useRouter } from 'vue-router';
 import AppPagination from '@/components/AppPagination.vue';
 import AppGrid from '@/components/AppGrid.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
-// import AppModal from '@/components/AppModal.vue';
-import PostModal from '@/components/posts/PostModal.vue';
 
 const router = useRouter();
 const posts = ref([]);
@@ -133,19 +123,6 @@ const goPage = id => {
 			id,
 		},
 	});
-};
-
-// modal
-const show = ref(false);
-const modalTitle = ref('');
-const modalContent = ref('');
-const modalCreatedAt = ref('');
-
-const openModal = item => {
-	show.value = true;
-	modalTitle.value = item.title;
-	modalContent.value = item.content;
-	modalCreatedAt.value = item.createdAt;
 };
 </script>
 

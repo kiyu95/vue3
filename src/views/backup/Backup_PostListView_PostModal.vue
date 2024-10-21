@@ -1,3 +1,5 @@
+<!-- PostListView PostModal 추가하기 전 version (인프런 Vue 실전편. 섹션6-3) -->
+
 <template>
 	<div>
 		<h2>게시글 목록</h2>
@@ -28,7 +30,7 @@
 				<PostItem
 					v-bind:title="item.title"
 					v-bind:content="item.content"
-					:created-at="item.createdAt"
+					:created_at="item.createdAt"
 					@click="goPage(item.id)"
 					@modal="openModal(item)"
 				></PostItem>
@@ -50,14 +52,23 @@
 			@page="page => (params._page = page)"
 		/>
 
-		<Teleport to="#modal">
-			<PostModal
-				v-model="show"
-				:title="modalTitle"
-				:content="modalContent"
-				:created-at="modalCreatedAt"
-			/>
-		</Teleport>
+		<AppModal :show="show" title="게시글" @close="closeModal">
+			<template #default>
+				<div class="row g-3">
+					<div class="col-3 text-muted">제목</div>
+					<div class="col-9">{{ modalTitle }}</div>
+					<div class="col-3 text-muted">내용</div>
+					<div class="col-9">{{ modalContent }}</div>
+					<div class="col-3 text-muted">등록일</div>
+					<div class="col-9">{{ modalCreatedAt }}</div>
+				</div>
+			</template>
+			<template #actions>
+				<button type="button" class="btn btn-secondary" @click="closeModal">
+					닫기
+				</button>
+			</template>
+		</AppModal>
 
 		<hr class="my-5" />
 		<AppCard>
@@ -76,8 +87,7 @@ import { useRouter } from 'vue-router';
 import AppPagination from '@/components/AppPagination.vue';
 import AppGrid from '@/components/AppGrid.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
-// import AppModal from '@/components/AppModal.vue';
-import PostModal from '@/components/posts/PostModal.vue';
+import AppModal from '@/components/AppModal.vue';
 
 const router = useRouter();
 const posts = ref([]);
@@ -146,6 +156,9 @@ const openModal = item => {
 	modalTitle.value = item.title;
 	modalContent.value = item.content;
 	modalCreatedAt.value = item.createdAt;
+};
+const closeModal = () => {
+	show.value = false;
 };
 </script>
 
